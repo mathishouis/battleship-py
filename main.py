@@ -5,7 +5,7 @@ from grid import Grid
 class Main:
     def __init__(self):
         pygame.init()
-        self.window = pygame.display.set_mode((480, 480))
+        self.window = pygame.display.set_mode((203, 203))
         pygame.display.set_caption("Bataille Navale")
         self.grid = Grid(self.window, 10, 10)
         self.running = True

@@ -1,4 +1,5 @@
 from tile import Tile
+from boat import Boat
 
 
 class Grid:
@@ -17,6 +18,10 @@ class Grid:
                 self.tiles[x][y] = Tile(self.window, x, y)
 
         print(self.tiles)
+        Boat(self.window, "./assets/boat_5.png", 2, 3, 5, 1, 0)
+        Boat(self.window, "./assets/boat_4.png", 2, 4, 4, 1, 0)
+        Boat(self.window, "./assets/boat_3.png", 2, 5, 3, 1, 0)
+        Boat(self.window, "./assets/boat_2.png", 2, 6, 2, 1, 0)
 
     def tiles(self):
         return self.tiles
