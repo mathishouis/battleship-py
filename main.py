@@ -19,6 +19,10 @@ class Main:
                     for row in self.grid.tiles:
                         for tile in row:
                             tile.click()
+                if event.type == pygame.MOUSEMOTION:
+                    for row in self.grid.tiles:
+                        for tile in row:
+                            tile.mouseover()
                 if event.type == pygame.QUIT:
                     self.running = False
 
