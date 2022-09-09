@@ -21,6 +21,5 @@ class Boat:
         self.window.blit(self.image, (self.x * self.tileWidth - self.x + 6, self.y * self.tileHeight - self.y + 6))
 
     def move(self, x, y):
-        print("XDD")
         self.x = x
         self.y = y

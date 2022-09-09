@@ -20,8 +20,3 @@ class Grid:
     def addBoat(self, boat):
         self.boats.append(boat)
 
-    def boats(self):
-        return self.boats
-
-    def tiles(self):
-        return self.tiles

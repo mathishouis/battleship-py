@@ -19,7 +19,7 @@ class Main:
 
     def __loop__(self):
         while self.running:
-            pygame.time.delay(60)
+            pygame.time.delay(1)
 
             # Event Management
 
@@ -31,8 +31,11 @@ class Main:
                 if event.type == pygame.MOUSEMOTION:
                     for row in self.grid.tiles:
                         for tile in row:
-                            tile.mouseover()
-                    self.grid.boats[0].move(2, 8)
+                            if tile.mouseover():
+                                if self.grid.x - self.grid.boats[0].width >= tile.x:
+                                    self.grid.boats[0].move(tile.x, tile.y)
+                                else:
+                                    self.grid.boats[0].move(self.grid.x - self.grid.boats[0].width, tile.y)
                 if event.type == pygame.QUIT:
                     self.running = False
 
@@ -46,6 +49,10 @@ class Main:
 
             for boat in self.grid.boats:
                 boat.__draw__()
+
+            for row in self.grid.tiles:
+                for tile in row:
+                    tile.__drawState__()
 
             pygame.display.flip()
 
