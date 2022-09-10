@@ -32,10 +32,30 @@ class Main:
                     for row in self.grid.tiles:
                         for tile in row:
                             if tile.mouseover():
-                                if self.grid.x - self.grid.boats[0].width >= tile.x:
+                                # Movement for direction 0
+                                if self.grid.x - self.grid.boats[0].width >= tile.x and self.grid.boats[0].direction == 0:
                                     self.grid.boats[0].move(tile.x, tile.y)
-                                else:
+                                elif self.grid.boats[0].direction == 0:
                                     self.grid.boats[0].move(self.grid.x - self.grid.boats[0].width, tile.y)
+                                # Movement for direction 1
+                                if self.grid.boats[0].width - 1 <= tile.y and self.grid.boats[0].direction == 1:
+                                    self.grid.boats[0].move(tile.x, tile.y)
+                                elif self.grid.boats[0].direction == 1:
+                                    self.grid.boats[0].move(tile.x, self.grid.boats[0].width - 1)
+                                # Movement for direction 2
+                                if self.grid.boats[0].width - 1 <= tile.x and self.grid.boats[0].direction == 2:
+                                    self.grid.boats[0].move(tile.x, tile.y)
+                                elif self.grid.boats[0].direction == 2:
+                                    self.grid.boats[0].move(self.grid.boats[0].width - 1, tile.y)
+                                # Movement for direction 3
+                                if self.grid.x - self.grid.boats[0].width >= tile.y and self.grid.boats[0].direction == 3:
+                                    self.grid.boats[0].move(tile.x, tile.y)
+                                elif self.grid.boats[0].direction == 3:
+                                    self.grid.boats[0].move(tile.x, self.grid.y - self.grid.boats[0].width)
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_r:
+                        print("key")
+                        self.grid.boats[0].rotate(self.grid.boats[0].direction + 1)
                 if event.type == pygame.QUIT:
                     self.running = False
 
