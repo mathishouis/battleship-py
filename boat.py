@@ -7,8 +7,8 @@ class Boat:
         self.imagePath = image
         self.x = x
         self.y = y
-        self.tileWidth = 20
-        self.tileHeight = 20
+        self.tileWidth = 40
+        self.tileHeight = 40
         self.width = width
         self.height = height
         self.direction = direction

@@ -7,14 +7,14 @@ class Tile:
         self.window = window
         self.x = x
         self.y = y
-        self.tileWidth = 20
-        self.tileHeight = 20
+        self.tileWidth = 40
+        self.tileHeight = 40
         self.state = 0
         print("cc")
         self.__draw__()
 
     def __draw__(self):
-        pygame.draw.rect(self.window, (102, 204, 0), (self.x * self.tileWidth - self.x + 6, self.y * self.tileHeight - self.y + 6, self.tileWidth, self.tileHeight), 1)
+        pygame.draw.rect(self.window, (102, 204, 0), (self.x * self.tileWidth - self.x + 6, self.y * self.tileHeight - self.y + 6, self.tileWidth, self.tileHeight), 2)
 
     def __drawState__(self):
         if self.state == 1:
@@ -34,5 +34,5 @@ class Tile:
     def click(self):
         if self.mouseover():
             rand = random.randint(1, 3)
-            self.state = rand
+            #self.state = rand
             print("CLICK", self.x, self.y)

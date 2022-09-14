@@ -5,9 +5,12 @@ class Grid:
     def __init__(self, window, x, y):
         self.tiles = []
         self.boats = []
+        self.selectedBoat = None
         self.window = window
         self.x = x
         self.y = y
+        self.stage = 0
+        self.turn = 0
         self.__generate__()
 
     def __generate__(self):
