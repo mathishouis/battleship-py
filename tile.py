@@ -33,6 +33,6 @@ class Tile:
 
     def click(self):
         if self.mouseover():
-            rand = random.randint(1, 3)
-            #self.state = rand
+            #rand = random.randint(1, 3)
+            self.state = 1
             print("CLICK", self.x, self.y)
