@@ -1,4 +1,5 @@
 import pygame
+import time
 from grid import Grid
 from boat import Boat
 
@@ -9,6 +10,7 @@ class Main:
         self.window = pygame.display.set_mode((403, 423))
         pygame.display.set_caption("Bataille Navale")
         self.font = pygame.font.Font("./assets/Volter_Goldfish.ttf", 9)
+        self.message = "Joueur 1, veuillez placer vos bateaux"
 
         self.placeableBoats = [
             Boat(self.window, "./assets/boat_2.png", 100, 100, 2, 1, 0),
@@ -33,30 +35,65 @@ class Main:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if self.grid.stage == 0 and self.grid.selectedBoat != None:
 
-                        for row in self.grid.tiles:
+                        for row in self.grid.tiles[self.grid.turn]:
                             for tile in row:
                                 if self.grid.selectedBoat != None and self.grid.selectedBoat.x == tile.x and self.grid.selectedBoat.y == tile.y:
 
-                                    self.grid.addBoat(self.grid.selectedBoat)
+                                    self.grid.addBoat(self.grid.turn, self.grid.selectedBoat)
+                                    print(self.grid.boats[self.grid.turn])
 
-                                    if len(self.grid.boats) == len(self.placeableBoats):
+                                    if len(self.grid.boats[self.grid.turn]) == len(self.placeableBoats):
                                         self.grid.selectedBoat = None
                                         if self.grid.turn == 0:
+                                            self.message = "Joueur 2, veuillez placer vos bateaux"
                                             self.grid.turn = 1
                                         else:
                                             self.grid.turn = 0
                                             self.grid.stage = 1
+                                            self.message = "Joueur 1, veuillez bombarder une case"
                                         print("x")
+                                        print(self.grid.turn)
                                     else:
-                                        print(len(self.grid.boats))
-                                        self.grid.selectedBoat = self.placeableBoats[len(self.grid.boats)]
+                                        print(len(self.grid.boats[self.grid.turn]))
+                                        self.grid.selectedBoat = self.placeableBoats[len(self.grid.boats[self.grid.turn])]
                                         print("ccffff")
                                     break
 
                                 else:
                                     tile.click()
+                    elif self.grid.stage == 1:
+                        for row in self.grid.tiles[self.grid.turn]:
+                            for tile in row:
+                                if tile.mouseover() and tile.state == 0:
+                                    touched = False
+                                    enemy = 0
+                                    if self.grid.turn == 0:
+                                        enemy = 1
+                                    for boat in self.grid.boats[enemy]:
+                                        if tile.x >= boat.x and tile.x < boat.x + boat.width and tile.y == boat.y and boat.direction == 0:
+                                            touched = True
+                                        elif tile.y <= boat.y and tile.y > boat.y - boat.width and tile.x == boat.x and boat.direction == 1:
+                                            touched = True
+                                        elif tile.x <= boat.x and tile.x > boat.x - boat.width and tile.y == boat.y and boat.direction == 2:
+                                            touched = True
+                                        elif tile.y >= boat.y and tile.y < boat.y + boat.width and tile.x == boat.x and boat.direction == 3:
+                                            touched = True
+                                    if touched:
+                                        tile.state = 2
+                                    else:
+                                        tile.state = 1
+
+                                    if self.grid.turn == 0:
+                                        self.grid.turn = 1
+                                        self.message = "Joueur 2, veuillez bombarder une case"
+                                    else:
+                                        self.grid.turn = 0
+                                        self.message = "Joueur 1, veuillez bombarder une case"
+
+                                    # Ajouter un délai??
+
                 if event.type == pygame.MOUSEMOTION:
-                    for row in self.grid.tiles:
+                    for row in self.grid.tiles[self.grid.turn]:
                         for tile in row:
                             if tile.mouseover():
                                 if self.grid.stage == 0:
@@ -98,20 +135,21 @@ class Main:
 
             # Draw
 
-            msg = self.font.render("Joueur 1, veuillez placer vos bateaux", True, (0, 204, 0))
+            msg = self.font.render(self.message, True, (0, 204, 0))
             self.window.blit(msg, (9, 405))
 
-            for row in self.grid.tiles:
+            for row in self.grid.tiles[self.grid.turn]:
                 for tile in row:
                     tile.__draw__()
 
-            for boat in self.grid.boats:
-                boat.__draw__()
+            if self.grid.stage == 0 :
+                for boat in self.grid.boats[self.grid.turn]:
+                    boat.__draw__()
 
             if self.grid.selectedBoat != None:
                 self.grid.selectedBoat.__draw__()
 
-            for row in self.grid.tiles:
+            for row in self.grid.tiles[self.grid.turn]:
                 for tile in row:
                     tile.__drawState__()
 
