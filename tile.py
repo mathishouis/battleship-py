@@ -9,7 +9,6 @@ class Tile:
         self.tileWidth = 40
         self.tileHeight = 40
         self.state = 0
-        print("cc")
         self.__draw__()
 
     def __draw__(self):
@@ -32,6 +31,4 @@ class Tile:
 
     def click(self):
         if self.mouseover():
-            #rand = random.randint(1, 3)
             self.state = 1
-            print("CLICK", self.x, self.y)
