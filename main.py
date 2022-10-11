@@ -186,7 +186,39 @@ class Main:
                 elif turn == 0:
                     turn = 1
                     self.message = "Joueur 1, veuillez bombarder une case"
-        
+
+            for boat in self.grid.boats[1 - self.grid.turn]:
+                destroyed = True
+                if boat.direction == 0:
+                    for x in range(boat.x, boat.x + boat.width):
+                        if self.grid.tiles[self.grid.turn][x][boat.y].state != 2:
+                            destroyed = False
+                if boat.direction == 1:
+                    for y in range(boat.y, boat.y + boat.width):
+                        if self.grid.tiles[self.grid.turn][boat.x][y - boat.width + 1].state != 2:
+                            destroyed = False
+                if boat.direction == 2:
+                    for x in range(boat.x, boat.x + boat.width):
+                        if self.grid.tiles[self.grid.turn][x - boat.width + 1][boat.y].state != 2:
+                            destroyed = False
+                if boat.direction == 3:
+                    for y in range(boat.y, boat.y + boat.width):
+                        if self.grid.tiles[self.grid.turn][boat.x][y].state != 2:
+                            destroyed = False
+                if destroyed:
+                    if boat.direction == 0:
+                        for x in range(boat.x, boat.x + boat.width):
+                            self.grid.tiles[self.grid.turn][x][boat.y].state = 3
+                    if boat.direction == 1:
+                        for y in range(boat.y, boat.y + boat.width):
+                            self.grid.tiles[self.grid.turn][boat.x][y - boat.width + 1].state = 3
+                    if boat.direction == 2:
+                        for x in range(boat.x, boat.x + boat.width):
+                            self.grid.tiles[self.grid.turn][x - boat.width + 1][boat.y].state = 3
+                    if boat.direction == 3:
+                        for y in range(boat.y, boat.y + boat.width):
+                            self.grid.tiles[self.grid.turn][boat.x][y].state = 3
+
             for row in self.grid.tiles[turn]:
                 for tile in row:
                     tile.__draw__()
@@ -194,11 +226,6 @@ class Main:
             if self.grid.stage == 0 :
                 for boat in self.grid.boats[self.grid.turn]:
                     boat.__draw__()
-
-            for boat in self.grid.boats[self.grid.turn]:
-                if boat.direction == 0:
-                    for x in range(boat.x, boat.width + 1):
-                        print(x)
 
             if self.grid.selectedBoat != None:
                 self.grid.selectedBoat.__draw__()
