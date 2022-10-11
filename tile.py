@@ -2,12 +2,12 @@ import pygame
 
 
 class Tile:
-    def __init__(self, window, x, y):
+    def __init__(self, window, x, y, tileWidth, tileHeight):
         self.window = window
         self.x = x
         self.y = y
-        self.tileWidth = 40
-        self.tileHeight = 40
+        self.tileWidth = tileWidth
+        self.tileHeight = tileHeight
         self.state = 0
         self.__draw__()
 

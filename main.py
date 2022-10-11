@@ -6,23 +6,22 @@ from boat import Boat
 class Main:
     def __init__(self):
         pygame.init()                                                          # Initialise pygame
-        self.width = 10
-        self.height = 10
-        self.tileWidth = 40
-        self.tileHeight = 40
+        self.width = 10 # Largeur de la grille
+        self.height = 10 # Hauteur de la grille
+        self.tileWidth = 40 # Largeur des cases
+        self.tileHeight = 40 # Hauteur des cases
         self.window = pygame.display.set_mode((self.width * self.tileWidth + 3, self.height * self.tileHeight + 23))                      # Création de la fenêtre
         pygame.display.set_caption("Bataille Navale")                          # Change le titre de la fenêtre
         self.font = pygame.font.Font("./assets/Volter_Goldfish.ttf", 9)        # Change la police d'écriture
         self.message = "Joueur 1, veuillez placer vos bateaux"                 # Texte qui sera affiché en bas de la fenêtre (indication joueur)
-
         self.placeableBoats = [                                                # Tableau contenant tous les bateaux qui peuvent être placé en début de partie
-            Boat(self.window, "./assets/boat_2.png", 100, 100, 2, 1, 0),
-            Boat(self.window, "./assets/boat_3.png", 100, 100, 3, 1, 0),
-            Boat(self.window, "./assets/boat_3.png", 100, 100, 3, 1, 0),
-            Boat(self.window, "./assets/boat_4.png", 100, 100, 4, 1, 0),
-            Boat(self.window, "./assets/boat_5.png", 100, 100, 5, 1, 0)
+            Boat(self.window, "./assets/boat_2.png", 100, 100, self.tileWidth, self.tileHeight, 2, 1, 0),
+            Boat(self.window, "./assets/boat_3.png", 100, 100, self.tileWidth, self.tileHeight, 3, 1, 0),
+            Boat(self.window, "./assets/boat_3.png", 100, 100, self.tileWidth, self.tileHeight, 3, 1, 0),
+            Boat(self.window, "./assets/boat_4.png", 100, 100, self.tileWidth, self.tileHeight, 4, 1, 0),
+            Boat(self.window, "./assets/boat_5.png", 100, 100, self.tileWidth, self.tileHeight, 5, 1, 0)
         ]
-        self.grid = Grid(self.window, self.width, self.height)                                  # Création de la grille de la bataille navale
+        self.grid = Grid(self.window, self.width, self.height, self.tileWidth, self.tileHeight)                                  # Création de la grille de la bataille navale
         self.running = True                                                    #
         self.__loop__()                                                        # Démarrage de la boucle de rendu
 
@@ -31,17 +30,22 @@ class Main:
         delay = False
         while self.running:
             pygame.time.delay(1)
-            
-            touchedCount = 0
-            
-            for row in self.grid.tiles[1 - self.grid.turn]:
-                for tile in row:
-                    if tile.state == 2:
-                        touchedCount += 1
-            print(touchedCount)
-            if touchedCount == 17:
-                self.grid.stage = 2
-                self.message = "Victoire du Joueur " + str(1 - self.grid.turn + 1)
+
+            # Gestion des victoires
+            if self.grid.stage == 1:
+                touchedCount = 0
+                tileBoatCount = 0
+
+                for boat in self.grid.boats[1 - self.grid.turn]:
+                    tileBoatCount += boat.width * boat.height
+
+                for row in self.grid.tiles[1 - self.grid.turn]:
+                    for tile in row:
+                        if tile.state == 2:
+                            touchedCount += 1
+                if touchedCount == tileBoatCount:
+                    self.grid.stage = 2
+                    self.message = "Victoire du Joueur " + str(1 - self.grid.turn + 1)
             
             # Gestion des interactions
             for event in pygame.event.get():
@@ -57,12 +61,12 @@ class Main:
                                         self.grid.selectedBoat = None                                                                         # Alors on met le bateau sélectionné en nul
                                         if self.grid.turn == 0:                                                                               # Si c'était au tour du joueur 1 alors c'est désormais au tour du joueur 2 de placer ses bateaux
                                             self.message = "Joueur 2, veuillez placer vos bateaux"                                            # Change le texte qui sera affiché en bas de la fenêtre (indication joueur)
-                                            self.placeableBoats = [                                                                           # Réinitialise la liste des bateaux placeable
-                                                Boat(self.window, "./assets/boat_2.png", 100, 100, 2, 1, 0),
-                                                Boat(self.window, "./assets/boat_3.png", 100, 100, 3, 1, 0),
-                                                Boat(self.window, "./assets/boat_3.png", 100, 100, 3, 1, 0),
-                                                Boat(self.window, "./assets/boat_4.png", 100, 100, 4, 1, 0),
-                                                Boat(self.window, "./assets/boat_5.png", 100, 100, 5, 1, 0)
+                                            self.placeableBoats = [                                                # Réinitialise les bateaux placeables
+                                                Boat(self.window, "./assets/boat_2.png", 100, 100, self.tileWidth, self.tileHeight, 2, 1, 0),
+                                                Boat(self.window, "./assets/boat_3.png", 100, 100, self.tileWidth, self.tileHeight, 3, 1, 0),
+                                                Boat(self.window, "./assets/boat_3.png", 100, 100, self.tileWidth, self.tileHeight, 3, 1, 0),
+                                                Boat(self.window, "./assets/boat_4.png", 100, 100, self.tileWidth, self.tileHeight, 4, 1, 0),
+                                                Boat(self.window, "./assets/boat_5.png", 100, 100, self.tileWidth, self.tileHeight, 5, 1, 0)
                                             ]
                                             self.grid.turn = 1                                                                                # Au tour du joueur 2
                                         else:
@@ -170,7 +174,7 @@ class Main:
 
             # Partie rendu des éléments
             
-            msg = self.font.render(self.message, True, (0, 204, 0))
+            msg = self.font.render(self.message, True, (0, 204, 0))          # Texte indiquant quel joueur doit jouer
             self.window.blit(msg, (9, self.height * self.tileHeight + 5))
 
             turn = self.grid.turn
@@ -190,6 +194,11 @@ class Main:
             if self.grid.stage == 0 :
                 for boat in self.grid.boats[self.grid.turn]:
                     boat.__draw__()
+
+            for boat in self.grid.boats[self.grid.turn]:
+                if boat.direction == 0:
+                    for x in range(boat.x, boat.width + 1):
+                        print(x)
 
             if self.grid.selectedBoat != None:
                 self.grid.selectedBoat.__draw__()

@@ -2,13 +2,13 @@ import pygame
 
 
 class Boat:
-    def __init__(self, window, image, x, y, width, height, direction):
+    def __init__(self, window, image, x, y, tileWidth, tileHeight, width, height, direction):
         self.window = window
         self.imagePath = image
         self.x = x
         self.y = y
-        self.tileWidth = 40
-        self.tileHeight = 40
+        self.tileWidth = tileWidth
+        self.tileHeight = tileHeight
         self.width = width
         self.height = height
         self.direction = direction
